@@ -1,75 +1,82 @@
-# React + TypeScript + Vite
+# Claude Project Downloader
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A Chrome extension to export Claude conversations as Markdown and download all files from Claude projects as a ZIP.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- **Export conversations** — saves any Claude chat as a `.md` or `.zip` file
+- **Download project files** — bulk-downloads all context files from a Claude project into a ZIP
+- **Export report** — includes a `_report.md` inside every project ZIP listing what downloaded and what didn't
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Installation (from ZIP)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+> No Chrome Web Store required — install directly in developer mode.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1. **Download** the latest `claude-md-exporter.zip` from the [Releases](../../releases) page
+2. **Unzip** it anywhere on your computer — you'll get a folder called `dist` (or similar)
+3. Open Chrome and go to `chrome://extensions`
+4. Enable **Developer mode** using the toggle in the top-right corner
+5. Click **Load unpacked**
+6. Select the unzipped folder
+7. The extension icon will appear in your Chrome toolbar
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+> If Chrome shows a warning about developer mode extensions on startup, click **Keep** to dismiss it.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
 
-```
+## Usage
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+### Export a Conversation
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1. Open any conversation on [claude.ai](https://claude.ai)
+2. Click the extension icon in the toolbar
+3. Choose **Markdown** or **ZIP** as the export format
+4. Click **Export**
+5. The file downloads automatically to your Downloads folder
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Download Project Files
 
-```
+1. Open a Claude project on [claude.ai/project/...](https://claude.ai)
+   - Make sure you are on the **project page**, not inside a conversation
+2. Click the extension icon
+3. Click **Export**
+4. A ZIP file is downloaded containing all project context files and a `_report.md` summary
+
+---
+
+## Updating
+
+1. Download the new ZIP from the [Releases](../../releases) page
+2. Unzip and replace the contents of your existing folder
+3. Go to `chrome://extensions` and click the **reload** icon on the extension card
+
+---
+
+## Troubleshooting
+
+| Problem | Fix |
+|---|---|
+| "No conversation found" | Scroll through the full chat once, then try again |
+| Project ZIP is empty | Make sure you are on the project page (URL contains `/project/`) and are logged in to Claude |
+| Extension not visible in toolbar | Click the puzzle icon in Chrome toolbar and pin the extension |
+| Files show as unavailable in `_report.md` | Claude may restrict downloading certain file types — text content is always extracted as a fallback |
+
+---
+
+## Permissions Used
+
+| Permission | Reason |
+|---|---|
+| `activeTab` | Read the current Claude tab's URL to detect page type |
+| `scripting` | Inject a script into the Claude page to scrape conversation and project data |
+| `https://claude.ai/*` | Restrict access to Claude pages only |
+
+---
+
+## License
+
+MIT
